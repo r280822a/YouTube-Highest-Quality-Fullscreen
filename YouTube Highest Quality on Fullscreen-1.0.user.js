@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         YouTube 4K on Fullscreen
+// @name         YouTube Highest Quality on Fullscreen
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Set YouTube resolution to 4K (2160p) when entering fullscreen
+// @version      1.1
+// @description  Set YouTube video to highest available resolution when entering fullscreen (e.g. 4K, 1440p, 1080p, etc.)
 // @author       Rehan Ahmad
 // @match        https://www.youtube.com/*
 // @grant        none
@@ -11,31 +11,32 @@
 (function () {
     'use strict';
 
-    function setResolutionTo4K() {
+    function setHighestResolution() {
         const player = document.getElementById('movie_player');
         if (!player) return;
 
         const qualities = player.getAvailableQualityLevels?.();
-        if (!qualities || !qualities.includes('hd2160')) {
-            console.warn('4K not available. Available qualities:', qualities);
+        if (!qualities || qualities.length === 0) {
+            console.warn('No available resolutions found.');
             return;
         }
 
-        console.log('Setting to 4K');
-        player.setPlaybackQualityRange?.('hd2160');
-        player.setPlaybackQuality?.('hd2160');
+        const highest = qualities[0]; // YouTube lists highest resolution first
+        console.log('Setting resolution to highest available:', highest);
+        player.setPlaybackQualityRange?.(highest);
+        player.setPlaybackQuality?.(highest);
     }
 
     document.addEventListener('fullscreenchange', () => {
         if (document.fullscreenElement) {
-            setTimeout(setResolutionTo4K, 500);
+            setTimeout(setHighestResolution, 500);
         }
     });
 
     // If already fullscreen on load
     window.addEventListener('load', () => {
         if (document.fullscreenElement) {
-            setTimeout(setResolutionTo4K, 1000);
+            setTimeout(setHighestResolution, 1000);
         }
     });
 })();
