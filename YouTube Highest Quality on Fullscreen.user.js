@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Highest Quality on Fullscreen
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.4
 // @description  Set YouTube video to highest available resolution when entering fullscreen (e.g. 4K, 1440p, 1080p, etc.)
 // @author       Rehan Ahmad
 // @match        https://www.youtube.com/*
@@ -30,17 +30,21 @@
         if (!player) return;
 
         const qualityLevels = player.getAvailableQualityLevels?.();
-        console.log('All quality levels:', qualityLevels);
+        const currentQuality = player.getPlaybackQuality?.();
+        // console.log('All quality levels:', qualityLevels);
+        // console.log('Current quality:', currentQuality);
         if (!qualityLevels || qualityLevels.length === 0) {
             console.warn('No available quality levels found.');
             return;
         }
 
         const highest = qualityLevels[0]; // YouTube lists highest quality first
-        player.setPlaybackQualityRange?.(highest);
-        player.setPlaybackQuality?.(highest);
-        console.log('Quality set to highest available after entering fullscreen:', highest);
-        showToast('Quality set to ' + highest);
+        if (currentQuality != highest) {
+            player.setPlaybackQualityRange?.(highest);
+            player.setPlaybackQuality?.(highest);
+            console.log('Quality set to highest available after entering fullscreen:', highest);
+            showToast('Quality set to ' + highest);
+        }
     }
 
     document.addEventListener('fullscreenchange', () => {
