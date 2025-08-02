@@ -5,6 +5,7 @@
 // @description  Set YouTube video to highest available resolution when entering fullscreen (e.g. 4K, 1440p, 1080p, etc.)
 // @author       Rehan Ahmad
 // @match        https://www.youtube.com/*
+// @icon         https://raw.githubusercontent.com/r280822a/YouTube-Highest-Quality-Fullscreen/refs/heads/main/icon/icon.png
 // @grant        none
 // ==/UserScript==
 
